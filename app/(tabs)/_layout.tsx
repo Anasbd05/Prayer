@@ -10,28 +10,17 @@ export default function RootLayout() {
         tabBarStyle: {
           backgroundColor: "#001529ff",
           height: 65,
-          marginBottom: 35,
+          marginBottom: 40,
           borderColor: "#001529ff",
         },
-
-        headerStyle: {
-          backgroundColor: "#000",
-          borderBottomWidth: 2,
-          borderBottomColor: "#000f29ff",
-        },
-        headerTintColor: "#FFF",
-        headerTitleStyle: {
-          fontWeight: "800",
-          fontSize: 20,
-        },
+        headerShown: false,
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "700",
           marginBottom: Platform.OS === "ios" ? 4 : -18,
         },
-        tabBarIconStyle: {},
         tabBarActiveTintColor: "#FFD93D",
-        tabBarInactiveTintColor: "#E6E6E6",
+        tabBarInactiveTintColor: "#888",
       }}
     >
       <Tabs.Screen
