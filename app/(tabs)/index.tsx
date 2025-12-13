@@ -1,8 +1,18 @@
+// IMPROVED VERSION WITH BUG FIXES AND ENHANCEMENTS
+
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useEffect, useState } from "react";
-import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import tw from "twrnc";
-const badge = require("../../assets/images/badge.png");
+import { badges } from "../../assets/assets";
+const badgeImg = require("../../assets/images/badge.png");
 
 const CountdownBox = ({ value, label }: { value: number; label: string }) => (
   <View
@@ -21,6 +31,7 @@ const CountdownBox = ({ value, label }: { value: number; label: string }) => (
 
 export default function Index() {
   const [isRunning, setIsRunning] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [totalSeconds, setTotalSeconds] = useState(0);
 
   useEffect(() => {
@@ -53,76 +64,117 @@ export default function Index() {
     setTotalSeconds(0);
   };
 
+  const handleMenuClose = () => {
+    setShowMenu(false);
+  };
+
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
-      <View
-        style={tw` flex gap-10 mt-8 bg-[#001529ff] p-5 items-center flex-row `}
-      >
-        <AntDesign name="menu" size={22} color="white" />
-        <Text style={tw` text-white font-bold text-2xl `}>Pray</Text>
-      </View>
-
-      <View style={tw` flex flex-col mt-10 items-center`}>
-        <Image
-          source={badge}
-          style={tw`h-44 z-50 w-44 bg-gray-100 border-2 border-black rounded-full`}
-        />
-        <View
-          style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl `}
-        >
-          <Text style={tw` text-black text-xl mt-10 font-semibold `}>Good</Text>
-          <Text style={tw` text-black font-medium text-neutral-800 `}>
-            Current Badge
-          </Text>
-        </View>
-        {isRunning ? (
-          <View style={tw`flex flex-col mt-45 items-center px-4`}>
-            <View style={tw`flex flex-row gap-3 justify-center`}>
-              <CountdownBox value={time.days} label="days" />
-              <CountdownBox value={time.hours} label="hours" />
-              <CountdownBox value={time.minutes} label="min" />
-              <CountdownBox value={time.secs} label="sec" />
-            </View>
-            <Pressable
-              onPress={() => setIsRunning(false)}
-              style={tw`bg-red-600 mt-6 py-3 px-10 rounded-lg `}
-            >
-              <Text style={tw`text-xl font-medium text-center text-white`}>
-                Stop
-              </Text>
+      <View style={tw`flex flex-row h-full relative`}>
+        {/* Main Content */}
+        <View style={tw`w-full `}>
+          {/* Header */}
+          <View
+            style={tw`flex gap-10 mt-5 bg-[#001529ff] p-5 items-center flex-row`}
+          >
+            <Pressable onPress={() => setShowMenu(true)}>
+              <AntDesign name="menu" size={22} color="white" />
             </Pressable>
+            <Text style={tw`text-white font-bold text-2xl`}>Pray</Text>
           </View>
-        ) : (
-          <View style={tw`flex flex-col mt-45 items-center px-4`}>
-            {totalSeconds > 0 && (
-              <View style={tw`flex flex-row gap-3 justify-center mb-6`}>
-                <CountdownBox value={time.days} label="days" />
-                <CountdownBox value={time.hours} label="hours" />
-                <CountdownBox value={time.minutes} label="min" />
-                <CountdownBox value={time.secs} label="sec" />
-              </View>
-            )}
-            <View style={tw`flex flex-row gap-4 items-center px-4`}>
-              <Pressable
-                onPress={() => setIsRunning(true)}
-                style={tw`bg-green-600 py-3 px-8 rounded-lg `}
-              >
-                <Text style={tw`text-xl font-medium text-center text-white`}>
-                  {totalSeconds > 0 ? "Resume" : "Start"}
-                </Text>
-              </Pressable>
-              {totalSeconds > 0 && (
+
+          {/* Badge Section */}
+          <View style={tw`flex flex-col mt-10 items-center`}>
+            <Image
+              source={badgeImg}
+              style={tw`h-44 z-50 w-44 bg-gray-100 border-2 border-black rounded-full`}
+            />
+            <View
+              style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl`}
+            >
+              <Text style={tw`text-black text-xl mt-10 font-semibold`}>
+                Good
+              </Text>
+              <Text style={tw`text-black font-medium text-neutral-800`}>
+                Current Badge
+              </Text>
+            </View>
+
+            {/* Timer Display */}
+            <View style={tw`flex flex-col mt-45 items-center px-4`}>
+              {(isRunning || totalSeconds > 0) && (
+                <View style={tw`flex flex-row gap-3 justify-center mb-6`}>
+                  <CountdownBox value={time.days} label="days" />
+                  <CountdownBox value={time.hours} label="hours" />
+                  <CountdownBox value={time.minutes} label="min" />
+                  <CountdownBox value={time.secs} label="sec" />
+                </View>
+              )}
+
+              {/* Control Buttons */}
+              <View style={tw`flex flex-row gap-4 items-center px-4`}>
                 <Pressable
-                  onPress={handleReset}
-                  style={tw`bg-red-600 py-3 px-8 rounded-lg `}
+                  onPress={() => setIsRunning(!isRunning)}
+                  style={tw`${
+                    isRunning ? "bg-red-600" : "bg-green-600"
+                  } py-3 px-8 rounded-lg`}
                 >
                   <Text style={tw`text-xl font-medium text-center text-white`}>
-                    Reset
+                    {isRunning
+                      ? "Pause"
+                      : totalSeconds > 0
+                      ? "Resume"
+                      : "Start"}
                   </Text>
                 </Pressable>
-              )}
+
+                {totalSeconds > 0 && (
+                  <Pressable
+                    onPress={handleReset}
+                    style={tw`bg-red-600 py-3 px-8 rounded-lg`}
+                  >
+                    <Text
+                      style={tw`text-xl font-medium text-center text-white`}
+                    >
+                      Reset
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
             </View>
           </View>
+        </View>
+
+        {/* Sidebar Menu */}
+        {showMenu && (
+          <ScrollView style={tw`bg-[#001F3D]  absolute z-50 h-full w-5/6`}>
+            <View
+              style={tw`flex gap-10 mt-5 bg-[#001F3D] p-5 items-center rounded-xl flex-row`}
+            >
+              <Pressable onPress={handleMenuClose}>
+                <AntDesign name="close" size={22} color="white" />
+              </Pressable>
+            </View>
+            {/* Add badges here */}
+            <View style={tw`flex p-5 flex-col gap-4`}>
+              {badges.map((badge, key) => (
+                <View key={key} style={tw`flex items-center flex-row gap-4`}>
+                  <Image
+                    source={badgeImg}
+                    style={tw`h-16 z-50 w-16  bg-gray-100 border-2 border-black rounded-full`}
+                  />
+                  <View>
+                    <Text style={tw`text-white text-lg font-bold `}>
+                      {badge.title}
+                    </Text>
+                    <Text style={tw`text-white text-gray-300 `}>
+                      {badge.description}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
