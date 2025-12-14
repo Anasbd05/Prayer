@@ -1,4 +1,4 @@
-// IMPROVED VERSION WITH BUG FIXES AND ENHANCEMENTS
+// النسخة المحسّنة مع إصلاحات وتحسينات
 
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useEffect, useState } from "react";
@@ -71,44 +71,44 @@ export default function Index() {
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
       <View style={tw`flex flex-row h-full relative`}>
-        {/* Main Content */}
-        <View style={tw`w-full `}>
-          {/* Header */}
+        {/* المحتوى الرئيسي */}
+        <View style={tw`w-full`}>
+          {/* العنوان */}
           <View
-            style={tw`flex gap-10 mt-5 bg-[#001529ff] p-5 items-center flex-row`}
+            style={tw`flex gap-10 justify-between mt-5 bg-[#001529ff] p-5 items-center flex-row`}
           >
             <Pressable onPress={() => setShowMenu(true)}>
               <AntDesign name="menu" size={22} color="white" />
             </Pressable>
-            <Text style={tw`text-white font-bold text-2xl`}>Pray</Text>
+            <Text style={tw`text-white font-bold text-2xl`}>قيام الليل</Text>
           </View>
 
-          {/* Badge Section */}
+          {/* قسم الوسام */}
           <View style={tw`flex flex-col mt-10 items-center`}>
             <Image source={badgeImg} style={tw`h-54 z-50 w-54`} />
             <View
               style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl`}
             >
               <Text style={tw`text-black text-xl mt-10 font-semibold`}>
-                Good
+                الليلة الأولى
               </Text>
               <Text style={tw`text-black font-medium text-neutral-800`}>
-                Current Badge
+                الوسام الحالي
               </Text>
             </View>
 
-            {/* Timer Display */}
+            {/* عرض المؤقت */}
             <View style={tw`flex flex-col mt-45 items-center px-4`}>
               {(isRunning || totalSeconds > 0) && (
                 <View style={tw`flex flex-row gap-3 justify-center mb-6`}>
-                  <CountdownBox value={time.days} label="days" />
-                  <CountdownBox value={time.hours} label="hours" />
-                  <CountdownBox value={time.minutes} label="min" />
-                  <CountdownBox value={time.secs} label="sec" />
+                  <CountdownBox value={time.days} label="أيام" />
+                  <CountdownBox value={time.hours} label="ساعات" />
+                  <CountdownBox value={time.minutes} label="دقائق" />
+                  <CountdownBox value={time.secs} label="ثوانٍ" />
                 </View>
               )}
 
-              {/* Control Buttons */}
+              {/* أزرار التحكم */}
               <View style={tw`flex flex-row gap-4 items-center px-4`}>
                 <Pressable
                   onPress={() => setIsRunning(!isRunning)}
@@ -118,10 +118,10 @@ export default function Index() {
                 >
                   <Text style={tw`text-xl font-medium text-center text-white`}>
                     {isRunning
-                      ? "Pause"
+                      ? "إيقاف مؤقت"
                       : totalSeconds > 0
-                      ? "Resume"
-                      : "Start"}
+                      ? "متابعة"
+                      : "بدء"}
                   </Text>
                 </Pressable>
 
@@ -133,7 +133,7 @@ export default function Index() {
                     <Text
                       style={tw`text-xl font-medium text-center text-white`}
                     >
-                      Reset
+                      إعادة ضبط
                     </Text>
                   </Pressable>
                 )}
@@ -142,29 +142,31 @@ export default function Index() {
           </View>
         </View>
 
-        {/* Sidebar Menu */}
+        {/* القائمة الجانبية */}
         {showMenu && (
-          <ScrollView style={tw`bg-[#001F3D]  absolute z-50 h-full w-5/6`}>
+          <ScrollView style={tw`bg-[#001F3D] absolute z-50 h-full w-full`}>
             <View
-              style={tw`flex gap-10 mt-5 bg-[#001F3D] p-5 items-center rounded-xl flex-row`}
+              style={tw`flex justify-between mt-5 bg-[#001F3D] p-5 items-center flex-row`}
             >
               <Pressable onPress={handleMenuClose}>
                 <AntDesign name="close" size={22} color="white" />
               </Pressable>
+              <Text style={tw`text-white font-bold text-2xl`}>الأوسمة</Text>
             </View>
-            {/* Add badges here */}
+
+            {/* الأوسمة */}
             <View style={tw`flex p-5 flex-col gap-4`}>
               {badges.map((badge, key) => (
-                <View key={key} style={tw`flex  flex-row items-center gap-2`}>
+                <View key={key} style={tw`flex flex-row items-center gap-2`}>
                   <Image
                     source={badge.BadgeImage}
-                    style={tw`h-20 z-50 w-20 mt-1.5 `}
+                    style={tw`h-20 z-50 w-20 mt-1.5`}
                   />
                   <View>
-                    <Text style={tw`text-white text-lg font-bold `}>
+                    <Text style={tw`text-white text-lg font-bold`}>
                       {badge.title}
                     </Text>
-                    <Text style={tw`text-white  text-gray-300 `}>
+                    <Text style={tw`text-white mt-1 text-gray-200`}>
                       {badge.description}
                     </Text>
                   </View>

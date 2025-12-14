@@ -1,7 +1,6 @@
 import Entypo from "@expo/vector-icons/Entypo";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
 
 export default function RootLayout() {
   return (
@@ -17,7 +16,7 @@ export default function RootLayout() {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "700",
-          marginBottom: Platform.OS === "ios" ? 4 : -18,
+          marginBottom: -10,
         },
         tabBarActiveTintColor: "#FFD93D",
         tabBarInactiveTintColor: "#888",
