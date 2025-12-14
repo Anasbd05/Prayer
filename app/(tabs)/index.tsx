@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import { badges } from "../../assets/assets";
-const badgeImg = require("../../assets/images/badge.png");
+const badgeImg = require("../../assets/images/NSbadge.png");
 
 const CountdownBox = ({ value, label }: { value: number; label: string }) => (
   <View
@@ -85,10 +85,7 @@ export default function Index() {
 
           {/* Badge Section */}
           <View style={tw`flex flex-col mt-10 items-center`}>
-            <Image
-              source={badgeImg}
-              style={tw`h-44 z-50 w-44 bg-gray-100 border-2 border-black rounded-full`}
-            />
+            <Image source={badgeImg} style={tw`h-54 z-50 w-54`} />
             <View
               style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl`}
             >
@@ -158,16 +155,16 @@ export default function Index() {
             {/* Add badges here */}
             <View style={tw`flex p-5 flex-col gap-4`}>
               {badges.map((badge, key) => (
-                <View key={key} style={tw`flex items-center flex-row gap-4`}>
+                <View key={key} style={tw`flex  flex-row items-center gap-2`}>
                   <Image
-                    source={badgeImg}
-                    style={tw`h-16 z-50 w-16  bg-gray-100 border-2 border-black rounded-full`}
+                    source={badge.BadgeImage}
+                    style={tw`h-20 z-50 w-20 mt-1.5 `}
                   />
                   <View>
                     <Text style={tw`text-white text-lg font-bold `}>
                       {badge.title}
                     </Text>
-                    <Text style={tw`text-white text-gray-300 `}>
+                    <Text style={tw`text-white  text-gray-300 `}>
                       {badge.description}
                     </Text>
                   </View>
