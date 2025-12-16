@@ -7,9 +7,12 @@ export default function RootLayout() {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: "#001529ff",
-          height: 65,
-          marginBottom: 40,
+          height: 70,
+          marginBottom: 20,
           borderColor: "#001529ff",
+          marginLeft: 10,
+          marginRight: 10,
+          // Optional: position as absolute for a floating look
         },
         headerShown: false,
         tabBarLabelStyle: {
@@ -34,10 +37,6 @@ export default function RootLayout() {
         name="Guide"
         options={{
           title: "الأدعية",
-          tabBarItemStyle: {
-            backgroundColor: "#000",
-            height: 65,
-          },
           tabBarIcon: ({ color }) => (
             <Entypo name="layers" size={20} color={color} />
           ),
