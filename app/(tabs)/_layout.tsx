@@ -1,5 +1,4 @@
 import Entypo from "@expo/vector-icons/Entypo";
-import Fontisto from "@expo/vector-icons/Fontisto";
 import { Tabs } from "expo-router";
 
 export default function RootLayout() {
@@ -25,27 +24,31 @@ export default function RootLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "العداد",
           tabBarIcon: ({ color }) => (
             <Entypo name="home" size={20} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="Guide"
         options={{
-          title: "History",
+          title: "الأدعية",
+          tabBarItemStyle: {
+            backgroundColor: "#000",
+            height: 65,
+          },
           tabBarIcon: ({ color }) => (
-            <Fontisto name="history" size={20} color={color} />
+            <Entypo name="layers" size={20} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Guide"
+        name="history"
         options={{
-          title: "Guide",
+          title: "معلومات",
           tabBarIcon: ({ color }) => (
-            <Entypo name="layers" size={20} color={color} />
+            <Entypo name="help" size={20} color={color} />
           ),
         }}
       />
