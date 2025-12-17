@@ -8,11 +8,10 @@ export default function RootLayout() {
         tabBarStyle: {
           backgroundColor: "#001529ff",
           height: 70,
-          marginBottom: 20,
           borderColor: "#001529ff",
-          marginLeft: 10,
-          marginRight: 10,
-          // Optional: position as absolute for a floating look
+          flexDirection: "row",
+          elevation: 0,
+          marginBottom: 40,
         },
         headerShown: false,
         tabBarLabelStyle: {

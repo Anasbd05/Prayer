@@ -161,18 +161,18 @@ export default function Index() {
             </View>
           )}
 
-          <View style={tw`flex-row gap-4 mt-10`}>
+          <View style={tw`flex-row gap-4`}>
             {!isRunning ? (
               <Pressable
                 onPress={() => setIsRunning(true)}
-                style={tw`bg-green-600 px-8 py-3 rounded-lg`}
+                style={tw`bg-green-600 px-8  mt-30 py-3 rounded-lg`}
               >
                 <Text style={tw`text-white text-xl`}>بدء</Text>
               </Pressable>
             ) : (
               <Pressable
                 onPress={handleReset}
-                style={tw`bg-red-600 px-8 py-3 rounded-lg`}
+                style={tw`bg-red-600 px-8 py-3  mt-10 rounded-lg`}
               >
                 <Text style={tw`text-white text-xl`}>إعادة ضبط</Text>
               </Pressable>
