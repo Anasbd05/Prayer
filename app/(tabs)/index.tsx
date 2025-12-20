@@ -24,39 +24,56 @@ const SHbadge = require("../../assets/images/SHbadge.png");
 
 export default function Index() {
   const [showMenu, setShowMenu] = useState(false);
+  const [completeNights, setCompleteNights] = useState<string[]>([]);
 
   const Nights = [
-    { night: "1" },
-    { night: "2" },
-    { night: "3" },
-    { night: "4" },
-    { night: "5" },
-    { night: "6" },
-    { night: "7" },
-    { night: "8" },
-    { night: "9" },
-    { night: "10" },
-    { night: "11" },
-    { night: "12" },
-    { night: "13" },
-    { night: "14" },
-    { night: "15" },
-    { night: "16" },
-    { night: "17" },
-    { night: "18" },
-    { night: "19" },
-    { night: "20" },
-    { night: "21" },
-    { night: "22" },
-    { night: "23" },
-    { night: "24" },
-    { night: "25" },
-    { night: "26" },
-    { night: "27" },
-    { night: "28" },
-    { night: "29" },
-    { night: "30" },
+    { id: 1, night: "1" },
+    { id: 2, night: "2" },
+    { id: 3, night: "3" },
+    { id: 4, night: "4" },
+    { id: 5, night: "5" },
+    { id: 6, night: "6" },
+    { id: 7, night: "7" },
+    { id: 8, night: "8" },
+    { id: 9, night: "9" },
+    { id: 10, night: "10" },
+    { id: 11, night: "11" },
+    { id: 12, night: "12" },
+    { id: 13, night: "13" },
+    { id: 14, night: "14" },
+    { id: 15, night: "15" },
+    { id: 16, night: "16" },
+    { id: 17, night: "17" },
+    { id: 18, night: "18" },
+    { id: 19, night: "19" },
+    { id: 20, night: "20" },
+    { id: 21, night: "21" },
+    { id: 22, night: "22" },
+    { id: 23, night: "23" },
+    { id: 24, night: "24" },
+    { id: 25, night: "25" },
+    { id: 26, night: "26" },
+    { id: 27, night: "27" },
+    { id: 28, night: "28" },
+    { id: 29, night: "29" },
+    { id: 30, night: "30" },
   ];
+
+  const CompleteNight = (night: string) => {
+    setCompleteNights((prevNights) => {
+      if (prevNights.includes(night)) {
+        // remove night
+        return prevNights.filter((n) => n !== night);
+      }
+      // add night
+      return [...prevNights, night];
+    });
+  };
+  console.log(completeNights);
+
+  const Restart = () => {
+    setCompleteNights([]);
+  };
 
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
@@ -91,34 +108,67 @@ export default function Index() {
               ليالي قيام الليل:
             </Text>
             <View
-              style={tw`flex flex-row flex-wrap  w-full items-center justify-center gap-x-3 gap-y-6`}
-            >
-              {Nights.map((night, key) => (
-                <Pressable
-                  style={tw`w-15 h-24 rounded-xl bg-slate-900  border border-slate-700 flex flex-col items-center justify-center`}
-                  key={key}
-                >
-                  <MaterialCommunityIcons
-                    name="torch"
-                    size={26}
-                    style={{ transform: [{ rotate: "-90deg" }] }}
-                    color="#FF8100"
-                  />
-                  <Text
-                    style={tw`text-slate-100 text-xl text-center mt-2 font-semibold`}
-                  >
-                    {night.night}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-            <Pressable
-              style={tw`mt-10 mx-auto py-2 bg-[#001529ff] border-2 border-slate-700 w-36 rounded-lg `}
+              style={tw`flex mb-8 p-5 flex-row w-full justify-between items-center`}
             >
               <Text style={tw` font-semibold text-center text-lg text-white `}>
-                إعادة البدء
+                {completeNights.length}/{Nights.length} Nights
               </Text>
-            </Pressable>
+              <Pressable
+                onPress={Restart}
+                style={tw` py-2 bg-[#001529ff] border-2 border-slate-700 w-36 rounded-lg `}
+              >
+                <Text
+                  style={tw` font-semibold text-center text-lg text-white `}
+                >
+                  إعادة البدء
+                </Text>
+              </Pressable>
+            </View>
+            <View
+              style={tw`flex flex-row flex-wrap  w-full items-center justify-center gap-x-3 gap-y-6`}
+            >
+              {Nights.map((night, key) =>
+                completeNights.includes(night.night) ? (
+                  <Pressable
+                    style={tw`w-15 h-24 rounded-xl bg-emerald-600  border border-emerald-300 flex flex-col items-center justify-center
+                  `}
+                    key={key}
+                    onPress={() => CompleteNight(night.night)}
+                  >
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={26}
+                      color="#fff"
+                    />
+                    <Text
+                      style={tw`text-slate-100 text-xl text-center mt-2 font-semibold`}
+                    >
+                      {night.night}
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    style={tw`w-15 h-24 rounded-xl bg-slate-900  border border-slate-700 flex flex-col items-center justify-center 
+                      : "bg-slate-900 border-slate-700"
+                  `}
+                    key={key}
+                    onPress={() => CompleteNight(night.night)}
+                  >
+                    <MaterialCommunityIcons
+                      name="torch"
+                      size={26}
+                      style={{ transform: [{ rotate: "-90deg" }] }}
+                      color="#FF8100"
+                    />
+                    <Text
+                      style={tw`text-slate-100 text-xl text-center mt-2 font-semibold`}
+                    >
+                      {night.night}
+                    </Text>
+                  </Pressable>
+                )
+              )}
+            </View>
           </View>
         </ScrollView>
 
