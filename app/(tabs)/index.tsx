@@ -61,7 +61,7 @@ export default function Index() {
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
       <View style={tw`flex-1`}>
-        {/* HEADER */}
+        {/* العنوان */}
         <View
           style={tw`flex-row justify-between items-center bg-[#001529ff] p-5`}
         >
@@ -71,7 +71,7 @@ export default function Index() {
           <Text style={tw`text-white text-2xl font-bold`}>قيام الليل</Text>
         </View>
 
-        {/* MAIN */}
+        {/* المحتوى الرئيسي */}
         <ScrollView contentContainerStyle={tw` mt-10`}>
           <View style={tw`flex flex-col mt-10 items-center`}>
             <Image source={NSbadge} style={tw`h-54 z-50 w-54`} />
@@ -79,7 +79,7 @@ export default function Index() {
               style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl`}
             >
               <Text style={tw`text-black text-xl mt-10 font-semibold`}>
-                Night seeker
+                طالب الليل
               </Text>
               <Text style={tw`text-black font-medium text-neutral-800`}>
                 الوسام الحالي
@@ -87,8 +87,8 @@ export default function Index() {
             </View>
           </View>
           <View style={tw`my-24 mt-28`}>
-            <Text style={tw`text-xl p-5 font-semibold text-white`}>
-              Nights:
+            <Text style={tw`text-xl p-5 text-right font-semibold text-white`}>
+              ليالي قيام الليل:
             </Text>
             <View
               style={tw`flex flex-row flex-wrap  w-full items-center justify-center gap-x-3 gap-y-6`}
@@ -112,10 +112,17 @@ export default function Index() {
                 </Pressable>
               ))}
             </View>
+            <Pressable
+              style={tw`mt-10 mx-auto py-2 bg-[#001529ff] border-2 border-slate-700 w-36 rounded-lg `}
+            >
+              <Text style={tw` font-semibold text-center text-lg text-white `}>
+                إعادة البدء
+              </Text>
+            </Pressable>
           </View>
         </ScrollView>
 
-        {/* SIDEBAR */}
+        {/* الشريط الجانبي */}
         {showMenu && (
           <ScrollView style={tw`absolute bg-[#001F3D] h-full w-full z-50`}>
             <View style={tw`flex-row justify-between p-5`}>
