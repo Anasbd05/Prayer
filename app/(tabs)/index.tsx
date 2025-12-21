@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useState } from "react";
@@ -13,18 +12,17 @@ import {
 import tw from "twrnc";
 import { badges } from "../../assets/assets";
 
-const CQbadge = require("../../assets/images/CQbadge.png");
-const CWbadge = require("../../assets/images/CWbadge.png");
-const FNbadge = require("../../assets/images/FNbadge.png");
-const Gbadge = require("../../assets/images/Gbadge.png");
-const LNbadge = require("../../assets/images/LNbadge.png");
 const NSbadge = require("../../assets/images/NSbadge.png");
-const RSbadge = require("../../assets/images/RSbadge.png");
-const SHbadge = require("../../assets/images/SHbadge.png");
 
 export default function Index() {
   const [showMenu, setShowMenu] = useState(false);
-  const [completeNights, setCompleteNights] = useState<string[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedNight, setSelectedNight] = useState<string | null>(null);
+
+  // ✅ NEW: per-night status
+  const [nightStatus, setNightStatus] = useState<
+    Record<string, "yes" | "no" | "remove">
+  >({});
 
   const Nights = [
     { id: 1, night: "1" },
@@ -59,26 +57,10 @@ export default function Index() {
     { id: 30, night: "30" },
   ];
 
-  const CompleteNight = (night: string) => {
-    setCompleteNights((prevNights) => {
-      if (prevNights.includes(night)) {
-        // remove night
-        return prevNights.filter((n) => n !== night);
-      }
-      // add night
-      return [...prevNights, night];
-    });
-  };
-  console.log(completeNights);
-
-  const Restart = () => {
-    setCompleteNights([]);
-  };
-
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
       <View style={tw`flex-1`}>
-        {/* العنوان */}
+        {/* Header */}
         <View
           style={tw`flex-row justify-between items-center bg-[#001529ff] p-5`}
         >
@@ -88,91 +70,76 @@ export default function Index() {
           <Text style={tw`text-white text-2xl font-bold`}>قيام الليل</Text>
         </View>
 
-        {/* المحتوى الرئيسي */}
-        <ScrollView contentContainerStyle={tw` mt-10`}>
+        {/* Content */}
+        <ScrollView contentContainerStyle={tw`mt-10`}>
           <View style={tw`flex flex-col mt-10 items-center`}>
             <Image source={NSbadge} style={tw`h-54 z-50 w-54`} />
             <View
-              style={tw`bg-white h-38 absolute top-30 w-80 justify-center flex flex-col gap-1 items-center rounded-2xl`}
+              style={tw`bg-white h-38 absolute top-30 w-80 justify-center items-center rounded-2xl`}
             >
               <Text style={tw`text-black text-xl mt-10 font-semibold`}>
                 طالب الليل
               </Text>
-              <Text style={tw`text-black font-medium text-neutral-800`}>
-                الوسام الحالي
-              </Text>
+              <Text style={tw`text-neutral-800`}>الوسام الحالي</Text>
             </View>
           </View>
           <View style={tw`my-24 mt-28`}>
             <Text style={tw`text-xl p-5 text-right font-semibold text-white`}>
               ليالي قيام الليل:
             </Text>
+
+            {/* Nights Grid */}
             <View
-              style={tw`flex mb-8 p-5 flex-row w-full justify-between items-center`}
+              style={tw`flex flex-row flex-wrap w-full items-center justify-center gap-x-3 gap-y-6`}
             >
-              <Text style={tw` font-semibold text-center text-lg text-white `}>
-                {completeNights.length}/{Nights.length} Nights
-              </Text>
-              <Pressable
-                onPress={Restart}
-                style={tw` py-2 bg-[#001529ff] border-2 border-slate-700 w-36 rounded-lg `}
-              >
-                <Text
-                  style={tw` font-semibold text-center text-lg text-white `}
-                >
-                  إعادة البدء
-                </Text>
-              </Pressable>
-            </View>
-            <View
-              style={tw`flex flex-row flex-wrap  w-full items-center justify-center gap-x-3 gap-y-6`}
-            >
-              {Nights.map((night, key) =>
-                completeNights.includes(night.night) ? (
-                  <Pressable
-                    style={tw`w-15 h-24 rounded-xl bg-emerald-600  border border-emerald-300 flex flex-col items-center justify-center
+              {Nights.map((night) => (
+                <Pressable
+                  key={night.id}
+                  style={tw`w-15 h-24 rounded-xl flex items-center justify-center border
+                    ${
+                      nightStatus[night.night] === "yes"
+                        ? "bg-green-500"
+                        : nightStatus[night.night] === "no"
+                        ? "bg-[#f53649]"
+                        : "bg-slate-900 border-slate-700"
+                    }
                   `}
-                    key={key}
-                    onPress={() => CompleteNight(night.night)}
-                  >
+                  onPress={() => {
+                    setSelectedNight(night.night);
+                    setShowModal(true);
+                  }}
+                >
+                  {nightStatus[night.night] === "yes" ? (
                     <MaterialCommunityIcons
                       name="check"
                       size={26}
                       color="#fff"
                     />
-                    <Text
-                      style={tw`text-slate-100 text-xl text-center mt-2 font-semibold`}
-                    >
-                      {night.night}
-                    </Text>
-                  </Pressable>
-                ) : (
-                  <Pressable
-                    style={tw`w-15 h-24 rounded-xl bg-slate-900  border border-slate-700 flex flex-col items-center justify-center 
-                      : "bg-slate-900 border-slate-700"
-                  `}
-                    key={key}
-                    onPress={() => CompleteNight(night.night)}
-                  >
+                  ) : nightStatus[night.night] === "no" ? (
+                    <MaterialCommunityIcons
+                      name="close"
+                      size={26}
+                      color="#fff"
+                    />
+                  ) : (
                     <MaterialCommunityIcons
                       name="torch"
                       size={26}
                       style={{ transform: [{ rotate: "-90deg" }] }}
                       color="#FF8100"
                     />
-                    <Text
-                      style={tw`text-slate-100 text-xl text-center mt-2 font-semibold`}
-                    >
-                      {night.night}
-                    </Text>
-                  </Pressable>
-                )
-              )}
+                  )}
+
+                  <Text style={tw`text-xl mt-2 font-semibold text-white`}>
+                    {night.night}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
           </View>
         </ScrollView>
 
-        {/* الشريط الجانبي */}
+        {/* Side Menu */}
         {showMenu && (
           <ScrollView style={tw`absolute bg-[#001F3D] h-full w-full z-50`}>
             <View style={tw`flex-row justify-between p-5`}>
@@ -196,6 +163,90 @@ export default function Index() {
               ))}
             </View>
           </ScrollView>
+        )}
+
+        {/* Modal */}
+        {showModal && selectedNight && (
+          <View
+            style={tw`absolute inset-0 z-50 items-center justify-center bg-black/80`}
+          >
+            <View
+              style={tw`w-11/12 max-w-md rounded-2xl bg-[#001529ff] border border-slate-700 p-6`}
+            >
+              <View
+                style={tw`flex-row-reverse justify-between items-center mb-4`}
+              >
+                <Text style={tw`text-white text-xl font-bold`}>
+                  الليلة {selectedNight}
+                </Text>
+
+                <Pressable
+                  onPress={() => setShowModal(false)}
+                  style={tw`w-9 h-9 rounded-full bg-slate-800 items-center justify-center`}
+                >
+                  <AntDesign name="close" size={18} color="#cbd5e1" />
+                </Pressable>
+              </View>
+
+              <Text style={tw`text-slate-300 text-right mb-6 leading-6`}>
+                هل قمتَ بقيام الليل في هذه الليلة؟
+              </Text>
+
+              <View>
+                <View style={tw`flex-row justify-between gap-3`}>
+                  {/* NO */}
+                  <Pressable
+                    onPress={() => {
+                      setNightStatus((prev) => ({
+                        ...prev,
+                        [selectedNight]: "no",
+                      }));
+                      setShowModal(false);
+                    }}
+                    style={tw`w-2/4 py-2 rounded-lg bg-red-500`}
+                  >
+                    <Text
+                      style={tw`text-slate-300 text-lg text-center font-bold`}
+                    >
+                      لا
+                    </Text>
+                  </Pressable>
+
+                  {/* YES */}
+                  <Pressable
+                    onPress={() => {
+                      setNightStatus((prev) => ({
+                        ...prev,
+                        [selectedNight]: "yes",
+                      }));
+                      setShowModal(false);
+                    }}
+                    style={tw`w-2/4 py-2 rounded-lg bg-green-600`}
+                  >
+                    <Text
+                      style={tw`text-slate-300 text-lg text-center font-bold`}
+                    >
+                      نعم
+                    </Text>
+                  </Pressable>
+                </View>
+                <Pressable
+                  onPress={() => {
+                    setNightStatus((prev) => ({
+                      ...prev,
+                      [selectedNight]: "remove",
+                    }));
+                    setShowModal(false);
+                  }}
+                  style={tw`w-full py-2 mt-8 rounded-lg bg-black border border-slate-700`}
+                >
+                  <Text style={tw`text-white text-lg font-bold text-center`}>
+                    Remove
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
         )}
       </View>
     </SafeAreaView>
