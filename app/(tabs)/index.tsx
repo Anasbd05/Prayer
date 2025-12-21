@@ -1,6 +1,8 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useState } from "react";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -12,14 +14,23 @@ import {
 import tw from "twrnc";
 import { badges } from "../../assets/assets";
 
+const CQbadge = require("../../assets/images/CQbadge.png");
+const CWbadge = require("../../assets/images/CWbadge.png");
+const FNbadge = require("../../assets/images/FNbadge.png");
+const Gbadge = require("../../assets/images/Gbadge.png");
+const LNbadge = require("../../assets/images/LNbadge.png");
 const NSbadge = require("../../assets/images/NSbadge.png");
+const RSbadge = require("../../assets/images/RSbadge.png");
+const SHbadge = require("../../assets/images/SHbadge.png");
 
 export default function Index() {
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedNight, setSelectedNight] = useState<string | null>(null);
+  const [currentBadge, setCurrentBadge] = useState(FNbadge);
+  const [currentBadgeTitle, setCurrentBadgeTitle] = useState("");
 
-  // ✅ NEW: per-night status
+  const [completedNights, setCompletedNights] = useState<string[]>([]);
+  const [selectedNight, setSelectedNight] = useState<string | null>(null);
   const [nightStatus, setNightStatus] = useState<
     Record<string, "yes" | "no" | "remove">
   >({});
@@ -57,6 +68,51 @@ export default function Index() {
     { id: 30, night: "30" },
   ];
 
+  useEffect(() => {
+    const loadData = async () => {
+      const saved = await AsyncStorage.getItem("nightStatus");
+      const savedCompleted = await AsyncStorage.getItem("completedNights");
+      if (saved) setNightStatus(JSON.parse(saved));
+      if (savedCompleted) setCompletedNights(JSON.parse(savedCompleted));
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (completedNights.length >= 1) {
+      setCurrentBadge(FNbadge);
+      setCurrentBadgeTitle("بداية الطريق");
+    }
+    if (completedNights.length >= 3) {
+      setCurrentBadge(RSbadge);
+      setCurrentBadgeTitle("روحٌ ناهضة");
+    }
+    if (completedNights.length >= 5) {
+      setCurrentBadge(SHbadge);
+      setCurrentBadgeTitle("قلبٌ ثابت");
+    }
+    if (completedNights.length >= 7) {
+      setCurrentBadge(NSbadge);
+      setCurrentBadgeTitle("طالبُ الليل");
+    }
+    if (completedNights.length >= 10) {
+      setCurrentBadge(CWbadge);
+      setCurrentBadgeTitle("مواظبٌ على العبادة");
+    }
+    if (completedNights.length >= 15) {
+      setCurrentBadge(Gbadge);
+      setCurrentBadgeTitle("حارسُ الليل");
+    }
+    if (completedNights.length >= 20) {
+      setCurrentBadge(LNbadge);
+      setCurrentBadgeTitle("نورٌ في الظلام");
+    }
+    if (completedNights.length >= 30) {
+      setCurrentBadge(CQbadge);
+      setCurrentBadgeTitle("رفيقُ القيام");
+    }
+  }, [completedNights]);
+
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
       <View style={tw`flex-1`}>
@@ -73,20 +129,27 @@ export default function Index() {
         {/* Content */}
         <ScrollView contentContainerStyle={tw`mt-10`}>
           <View style={tw`flex flex-col mt-10 items-center`}>
-            <Image source={NSbadge} style={tw`h-54 z-50 w-54`} />
+            <Image source={currentBadge} style={tw`h-54 z-50 w-54`} />
             <View
               style={tw`bg-white h-38 absolute top-30 w-80 justify-center items-center rounded-2xl`}
             >
               <Text style={tw`text-black text-xl mt-10 font-semibold`}>
-                طالب الليل
+                {currentBadgeTitle}
               </Text>
               <Text style={tw`text-neutral-800`}>الوسام الحالي</Text>
             </View>
           </View>
           <View style={tw`my-24 mt-28`}>
-            <Text style={tw`text-xl p-5 text-right font-semibold text-white`}>
-              ليالي قيام الليل:
-            </Text>
+            <View
+              style={tw`flex flex-row-reverse justify-between items-center`}
+            >
+              <Text style={tw`text-xl p-5 text-right font-semibold text-white`}>
+                ليالي قيام الليل:
+              </Text>
+              <Text style={tw`text-xl p-5 text-right font-semibold text-white`}>
+                {completedNights.length}/{Nights.length}
+              </Text>
+            </View>
 
             {/* Nights Grid */}
             <View
@@ -196,11 +259,17 @@ export default function Index() {
                 <View style={tw`flex-row justify-between gap-3`}>
                   {/* NO */}
                   <Pressable
-                    onPress={() => {
-                      setNightStatus((prev) => ({
-                        ...prev,
-                        [selectedNight]: "no",
-                      }));
+                    onPress={async () => {
+                      const newStatus: Record<string, "yes" | "no" | "remove"> =
+                        {
+                          ...nightStatus,
+                          [selectedNight]: "no",
+                        };
+                      setNightStatus(newStatus);
+                      await AsyncStorage.setItem(
+                        "nightStatus",
+                        JSON.stringify(newStatus)
+                      );
                       setShowModal(false);
                     }}
                     style={tw`w-2/4 py-2 rounded-lg bg-red-500`}
@@ -214,11 +283,28 @@ export default function Index() {
 
                   {/* YES */}
                   <Pressable
-                    onPress={() => {
-                      setNightStatus((prev) => ({
-                        ...prev,
-                        [selectedNight]: "yes",
-                      }));
+                    onPress={async () => {
+                      const newStatus: Record<string, "yes" | "no" | "remove"> =
+                        {
+                          ...nightStatus,
+                          [selectedNight]: "yes",
+                        };
+                      setNightStatus(newStatus);
+                      await AsyncStorage.setItem(
+                        "nightStatus",
+                        JSON.stringify(newStatus)
+                      );
+
+                      const updatedNights = completedNights.includes(
+                        selectedNight
+                      )
+                        ? completedNights
+                        : [...completedNights, selectedNight];
+                      setCompletedNights(updatedNights);
+                      await AsyncStorage.setItem(
+                        "completedNights",
+                        JSON.stringify(updatedNights)
+                      );
                       setShowModal(false);
                     }}
                     style={tw`w-2/4 py-2 rounded-lg bg-green-600`}
@@ -230,20 +316,38 @@ export default function Index() {
                     </Text>
                   </Pressable>
                 </View>
-                <Pressable
-                  onPress={() => {
-                    setNightStatus((prev) => ({
-                      ...prev,
-                      [selectedNight]: "remove",
-                    }));
-                    setShowModal(false);
-                  }}
-                  style={tw`w-full py-2 mt-8 rounded-lg bg-black border border-slate-700`}
-                >
-                  <Text style={tw`text-white text-lg font-bold text-center`}>
-                    Remove
-                  </Text>
-                </Pressable>
+                {(nightStatus[selectedNight] === "yes" ||
+                  nightStatus[selectedNight] === "no") && (
+                  <Pressable
+                    onPress={async () => {
+                      const newStatus: Record<string, "yes" | "no" | "remove"> =
+                        {
+                          ...nightStatus,
+                          [selectedNight]: "remove",
+                        };
+                      setNightStatus(newStatus);
+                      await AsyncStorage.setItem(
+                        "nightStatus",
+                        JSON.stringify(newStatus)
+                      );
+
+                      const updatedNights = completedNights.filter(
+                        (night) => night !== selectedNight
+                      );
+                      setCompletedNights(updatedNights);
+                      await AsyncStorage.setItem(
+                        "completedNights",
+                        JSON.stringify(updatedNights)
+                      );
+                      setShowModal(false);
+                    }}
+                    style={tw`w-full py-2 mt-8 rounded-lg bg-black border border-slate-700`}
+                  >
+                    <Text style={tw`text-white text-lg font-bold text-center`}>
+                      Remove
+                    </Text>
+                  </Pressable>
+                )}
               </View>
             </View>
           </View>

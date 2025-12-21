@@ -9,8 +9,8 @@ import SHbadge from "./images/SHbadge.png";
 
 export const badges = [
   {
-    title: "الليلة الأولى",
-    description: "إتمام ليلة واحدة أو أكثر",
+    title: "بداية الطريق",
+    description: "أول وسام في رحلة قيام الليل",
     BadgeImage: FNbadge,
   },
   {
