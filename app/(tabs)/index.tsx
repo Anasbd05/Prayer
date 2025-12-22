@@ -344,7 +344,7 @@ export default function Index() {
                     style={tw`w-full py-2 mt-8 rounded-lg bg-black border border-slate-700`}
                   >
                     <Text style={tw`text-white text-lg font-bold text-center`}>
-                      Remove
+                      حذف الحالة
                     </Text>
                   </Pressable>
                 )}
