@@ -5,10 +5,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
   Image,
-  Pressable,
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import tw from "twrnc";
@@ -79,7 +79,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (completedNights.length >= 1) {
+    if (completedNights.length <= 1) {
       setCurrentBadge(FNbadge);
       setCurrentBadgeTitle("بداية الطريق");
     }
@@ -113,6 +113,19 @@ export default function Index() {
     }
   }, [completedNights]);
 
+  const restart = () => {
+    try {
+      setCompletedNights([]);
+      setCurrentBadge(FNbadge);
+      setCurrentBadgeTitle("بداية الطريق");
+      nightStatus && setNightStatus({});
+      AsyncStorage.removeItem("completedNights");
+      AsyncStorage.removeItem("nightStatus");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={tw`bg-black h-full`}>
       <View style={tw`flex-1`}>
@@ -120,9 +133,9 @@ export default function Index() {
         <View
           style={tw`flex-row justify-between items-center bg-[#001529ff] p-5`}
         >
-          <Pressable onPress={() => setShowMenu(true)}>
+          <TouchableOpacity onPress={() => setShowMenu(true)}>
             <AntDesign name="menu" size={22} color="white" />
-          </Pressable>
+          </TouchableOpacity>
           <Text style={tw`text-white text-2xl font-bold`}>قيام الليل</Text>
         </View>
 
@@ -139,7 +152,7 @@ export default function Index() {
               <Text style={tw`text-neutral-800`}>الوسام الحالي</Text>
             </View>
           </View>
-          <View style={tw`my-24 mt-28`}>
+          <View style={tw`mb-16 mt-28`}>
             <View
               style={tw`flex flex-row-reverse justify-between items-center`}
             >
@@ -156,7 +169,7 @@ export default function Index() {
               style={tw`flex flex-row flex-wrap w-full items-center justify-center gap-x-3 gap-y-6`}
             >
               {Nights.map((night) => (
-                <Pressable
+                <TouchableOpacity
                   key={night.id}
                   style={tw`w-15 h-24 rounded-xl flex items-center justify-center border
                     ${
@@ -196,9 +209,19 @@ export default function Index() {
                   <Text style={tw`text-xl mt-2 font-semibold text-white`}>
                     {night.night}
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
               ))}
             </View>
+            {completedNights.length !== 0 && (
+              <TouchableOpacity
+                onPress={restart}
+                style={tw`bg-red-600 p-4 mt-6 mx-5 rounded-lg`}
+              >
+                <Text style={tw`text-white text-lg font-bold text-center`}>
+                  البدء من جديد
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </ScrollView>
 
@@ -206,9 +229,9 @@ export default function Index() {
         {showMenu && (
           <ScrollView style={tw`absolute bg-[#001F3D] h-full w-full z-50`}>
             <View style={tw`flex-row justify-between p-5`}>
-              <Pressable onPress={() => setShowMenu(false)}>
+              <TouchableOpacity onPress={() => setShowMenu(false)}>
                 <AntDesign name="close" size={22} color="white" />
-              </Pressable>
+              </TouchableOpacity>
               <Text style={tw`text-white text-2xl font-bold`}>الأوسمة</Text>
             </View>
 
@@ -243,12 +266,12 @@ export default function Index() {
                   الليلة {selectedNight}
                 </Text>
 
-                <Pressable
+                <TouchableOpacity
                   onPress={() => setShowModal(false)}
                   style={tw`w-9 h-9 rounded-full bg-slate-800 items-center justify-center`}
                 >
                   <AntDesign name="close" size={18} color="#cbd5e1" />
-                </Pressable>
+                </TouchableOpacity>
               </View>
 
               <Text style={tw`text-slate-300 text-right mb-6 leading-6`}>
@@ -258,7 +281,7 @@ export default function Index() {
               <View>
                 <View style={tw`flex-row justify-between gap-3`}>
                   {/* NO */}
-                  <Pressable
+                  <TouchableOpacity
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {
@@ -279,10 +302,10 @@ export default function Index() {
                     >
                       لا
                     </Text>
-                  </Pressable>
+                  </TouchableOpacity>
 
                   {/* YES */}
-                  <Pressable
+                  <TouchableOpacity
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {
@@ -314,11 +337,11 @@ export default function Index() {
                     >
                       نعم
                     </Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
                 {(nightStatus[selectedNight] === "yes" ||
                   nightStatus[selectedNight] === "no") && (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {
@@ -346,7 +369,7 @@ export default function Index() {
                     <Text style={tw`text-white text-lg font-bold text-center`}>
                       حذف الحالة
                     </Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               </View>
             </View>
