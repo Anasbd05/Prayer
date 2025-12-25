@@ -26,7 +26,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "العداد",
+          title: "الليالي",
           tabBarIcon: ({ color }) => (
             <Entypo name="home" size={20} color={color} />
           ),
@@ -42,7 +42,7 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="Infos"
         options={{
           title: "معلومات",
           tabBarIcon: ({ color }) => (

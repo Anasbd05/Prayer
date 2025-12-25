@@ -127,13 +127,16 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={tw`bg-black h-full`}>
-      <View style={tw`flex-1`}>
+    <SafeAreaView style={tw`bg-black flex-1`}>
+      <View style={tw`flex-1 mt-5 `}>
         {/* Header */}
         <View
           style={tw`flex-row justify-between items-center bg-[#001529ff] p-5`}
         >
-          <TouchableOpacity onPress={() => setShowMenu(true)}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setShowMenu(true)}
+          >
             <AntDesign name="menu" size={22} color="white" />
           </TouchableOpacity>
           <Text style={tw`text-white text-2xl font-bold`}>قيام الليل</Text>
@@ -170,6 +173,7 @@ export default function Index() {
             >
               {Nights.map((night) => (
                 <TouchableOpacity
+                  activeOpacity={0.8}
                   key={night.id}
                   style={tw`w-15 h-24 rounded-xl flex items-center justify-center border
                     ${
@@ -214,6 +218,7 @@ export default function Index() {
             </View>
             {completedNights.length !== 0 && (
               <TouchableOpacity
+                activeOpacity={0.8}
                 onPress={restart}
                 style={tw`bg-red-600 p-4 mt-6 mx-5 rounded-lg`}
               >
@@ -229,7 +234,10 @@ export default function Index() {
         {showMenu && (
           <ScrollView style={tw`absolute bg-[#001F3D] h-full w-full z-50`}>
             <View style={tw`flex-row justify-between p-5`}>
-              <TouchableOpacity onPress={() => setShowMenu(false)}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setShowMenu(false)}
+              >
                 <AntDesign name="close" size={22} color="white" />
               </TouchableOpacity>
               <Text style={tw`text-white text-2xl font-bold`}>الأوسمة</Text>
@@ -267,6 +275,7 @@ export default function Index() {
                 </Text>
 
                 <TouchableOpacity
+                  activeOpacity={0.8}
                   onPress={() => setShowModal(false)}
                   style={tw`w-9 h-9 rounded-full bg-slate-800 items-center justify-center`}
                 >
@@ -282,6 +291,7 @@ export default function Index() {
                 <View style={tw`flex-row justify-between gap-3`}>
                   {/* NO */}
                   <TouchableOpacity
+                    activeOpacity={0.8}
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {
@@ -306,6 +316,7 @@ export default function Index() {
 
                   {/* YES */}
                   <TouchableOpacity
+                    activeOpacity={0.8}
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {
@@ -342,6 +353,7 @@ export default function Index() {
                 {(nightStatus[selectedNight] === "yes" ||
                   nightStatus[selectedNight] === "no") && (
                   <TouchableOpacity
+                    activeOpacity={0.8}
                     onPress={async () => {
                       const newStatus: Record<string, "yes" | "no" | "remove"> =
                         {

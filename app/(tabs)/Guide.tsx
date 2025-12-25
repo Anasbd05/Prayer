@@ -1,5 +1,7 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
+  Image,
   ScrollView,
   StatusBar,
   Text,
@@ -7,9 +9,10 @@ import {
   View,
 } from "react-native";
 import tw from "twrnc";
-import { duas } from "../../assets/assets";
+import { DuasLists } from "../../assets/assets";
 
 export default function Guide() {
+  const router = useRouter();
   return (
     <View style={tw`bg-black flex-1`}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
@@ -27,28 +30,26 @@ export default function Guide() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`py-6`}
       >
-        {duas.map((duaa, index) => (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={0.7}
-            style={tw`rounded-3xl p-5 mx-4 mb-4 border border-[#001529ff] shadow-lg`}
-          >
-            <View style={tw`flex flex-row justify-between items-start`}>
-              <View style={tw`flex-1 mr-4`}>
-                <Text
-                  style={tw`text-[#FFD93D] text-xs font-bold mb-3 tracking-widest`}
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </Text>
-                <Text
-                  style={tw`text-white text-xl font-bold leading-9 text-right mb-5 tracking-tight`}
-                >
-                  {duaa.text}
+        <View style={tw`flex flex-row justify-center w-full gap-5 flex-wrap `}>
+          {DuasLists.map((duaa, index) => (
+            <TouchableOpacity
+              onPress={() => router.push({ pathname: "/Duas", params: duaa })}
+              key={index}
+              activeOpacity={0.8}
+              style={tw`rounded-xl px-4 py-5 bg-[#001529ff] border border-[#001529ff]`}
+            >
+              <View style={tw`flex flex-col items-center gap-2`}>
+                <Image
+                  source={duaa.image}
+                  style={{ width: 140, height: 140 }}
+                />
+                <Text style={tw`text-white text-lg font-bold tracking-tight`}>
+                  {duaa.name}
                 </Text>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
 
         <View style={tw`h-4`} />
       </ScrollView>
