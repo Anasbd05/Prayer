@@ -216,7 +216,7 @@ export default function Index() {
                 </TouchableOpacity>
               ))}
             </View>
-            {completedNights.length !== 0 && (
+            {selectedNight && nightStatus[selectedNight] === "no" && (
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={restart}
@@ -376,9 +376,9 @@ export default function Index() {
                       );
                       setShowModal(false);
                     }}
-                    style={tw`w-full py-2 mt-8 rounded-lg bg-black border border-slate-700`}
+                    style={tw`w-full py-3 mt-8 rounded-lg bg-black border border-slate-700`}
                   >
-                    <Text style={tw`text-white text-lg font-bold text-center`}>
+                    <Text style={tw`text-white text-l font-bold text-center`}>
                       حذف الحالة
                     </Text>
                   </TouchableOpacity>
