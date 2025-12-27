@@ -216,7 +216,8 @@ export default function Index() {
                 </TouchableOpacity>
               ))}
             </View>
-            {selectedNight && nightStatus[selectedNight] === "no" && (
+            {((selectedNight && nightStatus[selectedNight] === "no") ||
+              completedNights.length >= 1) && (
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={restart}
